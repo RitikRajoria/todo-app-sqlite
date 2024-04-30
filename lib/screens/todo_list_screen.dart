@@ -82,42 +82,48 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Widget todoListUI(TodoSuccessState state) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: state.todoList.length,
-        itemBuilder: (context, index) {
-          final todo = state.todoList[index];
-          return ListTile(
-            leading: Checkbox(
-                value: todo.isCompleted,
-                onChanged: (newValue) {
-                  todo.isCompleted = newValue ?? false;
-                  _updateTodoStatus(todo);
-                }),
-            title: Text(todo.name),
-            subtitle: Text(todo.description),
-            trailing: SizedBox(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () => _editTodo(todo),
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.redAccent,
+    return state.todoList.isEmpty
+        ? const Expanded(
+            child: Center(
+              child: Text("No Todos"),
+            ),
+          )
+        : Expanded(
+            child: ListView.builder(
+              itemCount: state.todoList.length,
+              itemBuilder: (context, index) {
+                final todo = state.todoList[index];
+                return ListTile(
+                  leading: Checkbox(
+                      value: todo.isCompleted,
+                      onChanged: (newValue) {
+                        todo.isCompleted = newValue ?? false;
+                        _updateTodoStatus(todo);
+                      }),
+                  title: Text(todo.name),
+                  subtitle: Text(todo.description),
+                  trailing: SizedBox(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => _editTodo(todo),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () => _deleteTodoDialog(todo),
+                        ),
+                      ],
                     ),
-                    onPressed: () => _deleteTodoDialog(todo),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
   }
 
   Center todoLoadingUI() {
